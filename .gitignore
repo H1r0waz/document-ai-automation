@@ -1,0 +1,5 @@
+.env
+**/target/
+**/__pycache__/
+postgres-data/
+n8n-data/

@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: documents
+      POSTGRES_USER: documents
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U documents -d documents"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  document-api:
+    build: ./document-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/documents
+      SPRING_DATASOURCE_USERNAME: documents
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  extractor:
+    build: ./extractor
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_ENCRYPTION_KEY: local-development-key-change-before-production
+      GENERIC_TIMEZONE: America/Argentina/Buenos_Aires
+      EXTRACTOR_URL: http://extractor:8000
+      DOCUMENT_API_URL: http://document-api:8080
+    volumes:
+      - ./n8n-data:/home/node/.n8n
+    depends_on:
+      - extractor
+      - document-api
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "3000:80"
+    depends_on:
+      - n8n
+      - document-api
