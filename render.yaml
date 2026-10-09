@@ -38,7 +38,7 @@ services:
         value: https
       - key: N8N_PORT
         value: "10000"
-      - key: WEBHOOK_URL
+      - key: N8N_WEBHOOK_URL
         sync: false
       - key: EXTRACTOR_URL
         sync: false
