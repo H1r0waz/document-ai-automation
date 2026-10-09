@@ -1,6 +1,7 @@
 services:
   - type: web
     name: document-api
+    plan: free
     runtime: docker
     rootDir: document-api
     dockerfilePath: ./Dockerfile
@@ -15,21 +16,19 @@ services:
       - key: APP_ORIGIN
         sync: false
 
-  - type: pserv
+  - type: web
     name: document-extractor
+    plan: free
     runtime: docker
     rootDir: extractor
     dockerfilePath: ./Dockerfile
 
   - type: web
     name: document-automation-n8n
+    plan: free
     runtime: docker
     rootDir: n8n
     dockerfilePath: ./Dockerfile
-    disk:
-      name: n8n-data
-      mountPath: /home/node/.n8n
-      sizeGB: 1
     envVars:
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
@@ -42,7 +41,7 @@ services:
       - key: WEBHOOK_URL
         sync: false
       - key: EXTRACTOR_URL
-        value: http://document-extractor:8000
+        sync: false
       - key: DOCUMENT_API_URL
         sync: false
       - key: DB_TYPE
