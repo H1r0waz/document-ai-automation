@@ -1,10 +1,22 @@
 import re
 from datetime import date
 from decimal import Decimal
+import os
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pypdf import PdfReader
 
 app = FastAPI(title="Document extractor")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv(
+        "APP_ORIGIN",
+        "http://localhost:3000,https://document-ai-automation-dashboard.vercel.app",
+    ).split(","),
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 @app.post("/extract")
 async def extract(file: UploadFile = File(...)):

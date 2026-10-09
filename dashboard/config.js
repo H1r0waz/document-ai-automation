@@ -3,9 +3,11 @@ const localDevelopment = ["localhost", "127.0.0.1"].includes(window.location.hos
 window.DOCUMENT_AI_CONFIG = localDevelopment
   ? {
       apiBaseUrl: "/api",
-      workflowBaseUrl: "/workflow"
+      workflowBaseUrl: "/workflow",
+      extractorBaseUrl: "/extractor"
     }
   : {
       apiBaseUrl: "https://document-ai-automation.onrender.com/api",
-      workflowBaseUrl: "https://document-automation-n8n.onrender.com"
+      workflowBaseUrl: "https://document-automation-n8n.onrender.com",
+      extractorBaseUrl: "https://document-extractor-e3h1.onrender.com"
     };

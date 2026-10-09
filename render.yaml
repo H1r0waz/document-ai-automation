@@ -22,6 +22,9 @@ services:
     runtime: docker
     rootDir: extractor
     dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ORIGIN
+        value: https://document-ai-automation-dashboard.vercel.app
 
   - type: web
     name: document-automation-n8n
