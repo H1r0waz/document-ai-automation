@@ -2,7 +2,7 @@
   "name": "Procesar factura PDF",
   "nodes": [
     {"parameters":{"httpMethod":"POST","path":"factura","responseMode":"lastNode","options":{}},"id":"webhook","name":"Recibir PDF","type":"n8n-nodes-base.webhook","typeVersion":2,"position":[0,0]},
-    {"parameters":{"method":"POST","url":"={{ $env.EXTRACTOR_URL + '/extract' }}","sendBody":true,"contentType":"multipart-form-data","bodyParameters":{"parameters":[{"parameterType":"formBinaryData","name":"file","inputDataFieldName":"file"}]},"options":{}},"id":"extract","name":"Extraer campos","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[240,0]},
+    {"parameters":{"method":"POST","url":"={{ $env.EXTRACTOR_URL + '/extract' }}","sendBody":true,"contentType":"multipart-form-data","bodyParameters":{"parameters":[{"parameterType":"formBinaryData","name":"file","inputDataFieldName":"file"}]},"options":{}},"id":"extract","name":"Extraer campos","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[240,0],"retryOnFail":true,"maxTries":4,"waitBetweenTries":20000},
     {"parameters":{"method":"POST","url":"={{ $env.DOCUMENT_API_URL + '/api/documents' }}","sendBody":true,"contentType":"json","specifyBody":"json","jsonBody":"={{ JSON.stringify($json) }}","options":{}},"id":"save","name":"Guardar documento","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[480,0]}
   ],
   "connections":{"Recibir PDF":{"main":[[{"node":"Extraer campos","type":"main","index":0}]]},"Extraer campos":{"main":[[{"node":"Guardar documento","type":"main","index":0}]]}},
