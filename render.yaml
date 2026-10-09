@@ -38,6 +38,12 @@ services:
         value: https
       - key: N8N_PORT
         value: "10000"
+      # Render termina HTTPS en su proxy; n8n debe confiar en ese salto.
+      - key: N8N_PROXY_HOPS
+        value: "1"
+      # El workflow usa $env para las URLs de los servicios internos.
+      - key: N8N_BLOCK_ENV_ACCESS_IN_NODE
+        value: "false"
       - key: N8N_WEBHOOK_URL
         sync: false
       - key: EXTRACTOR_URL
